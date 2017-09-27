@@ -15,5 +15,21 @@
               <artifactId>netty-all</artifactId>
               <version>4.1.6.Final</version>
           </dependency>
+          <!-- ZooKeeper -->
+          <dependency>
+              <groupId>org.apache.curator</groupId>
+              <artifactId>curator-framework</artifactId>
+              <version>2.4.2</version>
+          </dependency>
+          <dependency>
+              <groupId>org.apache.curator</groupId>
+              <artifactId>curator-recipes</artifactId>
+              <version>2.4.2</version>
+          </dependency>
+          <dependency>
+              <groupId>org.apache.zookeeper</groupId>
+              <artifactId>zookeeper</artifactId>
+              <version>3.4.6</version>
+          </dependency>
       </dependencies>
 </project>
