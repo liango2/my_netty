@@ -15,10 +15,12 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 
 import java.net.InetAddress;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -48,8 +50,10 @@ public class MyNettyServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
-                                      .addLast(new DelimiterBasedFrameDecoder(65535, Delimiters.lineDelimiter()))
+                                    .addLast(new DelimiterBasedFrameDecoder(65535, Delimiters.lineDelimiter()))
                                     .addLast(new StringDecoder())
+                                    // 空闲检测
+                                    .addLast(new IdleStateHandler(60, 45, 20, TimeUnit.SECONDS))
                                     .addLast(new SimpleServerHandler())
                                     .addLast(new StringEncoder());
                         }
@@ -57,14 +61,18 @@ public class MyNettyServer {
                     //  4. 监听端口
                     .bind(8080).sync();
 
-            // 获取ip
-            String hostAddress = InetAddress.getLocalHost().getHostAddress();
+            try {
+                // 获取服务器ip
+                String hostAddress = InetAddress.getLocalHost().getHostAddress();
 
-            // 服务器注册到zk里面去
-            CuratorFramework curatorFramework = ZookeeperFactory.create();
-            curatorFramework.create()
-                    .withMode(CreateMode.EPHEMERAL)
-                    .forPath(Constants.SERVER_PATH + hostAddress);
+                // 服务器注册到zk里面去
+                CuratorFramework curatorFramework = ZookeeperFactory.create();
+                curatorFramework.create()
+                        .withMode(CreateMode.EPHEMERAL)
+                        .forPath(Constants.SERVER_PATH + hostAddress);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
@@ -72,9 +80,6 @@ public class MyNettyServer {
 
             parentGroup.shutdownGracefully();
             childGroup.shutdownGracefully();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
     }
 }
