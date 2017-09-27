@@ -1,5 +1,7 @@
 package com.liango.server;
 
+import com.liango.constant.Constants;
+import com.liango.factory.ZookeeperFactory;
 import com.liango.handler.SimpleServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -13,6 +15,10 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.CreateMode;
+
+import java.net.InetAddress;
 
 
 /**
@@ -50,12 +56,24 @@ public class MyNettyServer {
                     })
                     //  4. 监听端口
                     .bind(8080).sync();
+
+            // 获取ip
+            String hostAddress = InetAddress.getLocalHost().getHostAddress();
+
+            // 服务器注册到zk里面去
+            CuratorFramework curatorFramework = ZookeeperFactory.create();
+            curatorFramework.create()
+                    .withMode(CreateMode.EPHEMERAL)
+                    .forPath(Constants.SERVER_PATH + hostAddress);
+
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
 
             parentGroup.shutdownGracefully();
             childGroup.shutdownGracefully();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
