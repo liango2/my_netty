@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="modificationStamps">
+      <map>
+        <entry key="$USER_HOME$/hello-scala" value="1398275092342" />
+        <entry key="$PROJECT_DIR$/../../lianxi-play/my-first-app" value="1451809751092" />
+        <entry key="$PROJECT_DIR$/../../lianxi-play/play-java-intro-preview" value="1452592501386" />
+        <entry key="$PROJECT_DIR$/../../lianxi-play/play-scala-intro" value="1451811953806" />
+        <entry key="$PROJECT_DIR$/../../lianxi-play/playexample004-ok-使用sbt run/playexample" value="1452618287358" />
+        <entry key="$PROJECT_DIR$/../../lianxi-play/twitter-stream" value="1452243022850" />
+      </map>
+    </option>
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+</project>
