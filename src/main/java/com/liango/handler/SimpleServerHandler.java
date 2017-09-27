@@ -27,11 +27,14 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof ByteBuf) {
-            System.out.println("读取客户端通道的数据: " + ((ByteBuf) msg).toString(Charset.defaultCharset()));
+            System.out.println("读取到客户端通道的数据: ByteBuf =  " + ((ByteBuf) msg).toString(Charset.defaultCharset()));
+        } else {
+            System.out.println("读取到客户端通道的数据 =  " + msg.toString());
         }
 
+
         // 告诉客户端，我已经读到了你的数据了
-        ctx.channel().writeAndFlush("client你好，我是server,我已经读到了你的数据了is ok\r\n");
+        ctx.channel().writeAndFlush("client你好，我是server,我已经读到了你发给我的数据" + msg.toString() + ",is ok\r\n");
 //        ctx.channel().close();
     }
 
@@ -45,7 +48,7 @@ public class SimpleServerHandler extends ChannelInboundHandlerAdapter {
             } else if (evt1.state().equals(IdleState.WRITER_IDLE)) {
                 System.out.println("== 写空闲");
             } else if (evt1.state().equals(IdleState.ALL_IDLE)) {
-                System.out.println("== 读写空闲");
+                System.out.println("== 读写空闲，给客户端发个： ping");
                 ctx.channel().writeAndFlush("ping\r\n");
             }
         }
